@@ -1,0 +1,134 @@
+git原理 
+
+git分布式版本控制软件 （分布式就是多对多的关系）
+
+本地————>暂存区——————>版本库
+
+
+参考文档 https://blog.csdn.net/stringbuff/article/details/88430162
+
+第一部分【安装】
+
+下载git  安装（记住下载的路径） 记得选择第一个选项（P处理命令）
+配置环境变量
+C:\Program Files\Git\bin
+https://github.com/chenyingjun520/yqsl.git
+
+
+本地设置git用户名和邮箱
+
+第二部分【设置git用户名和邮箱】
+
+#设置用户名
+git config --global user.name "xxx"
+#设置邮箱
+git config --global user.email "xxx@xxx.com"
+
+第三部分【搭建git服务器】
+
+生成SSH秘钥
+
+id_rsa  私钥
+id_rsa.pub 公钥
+
+ ssh-keygen -t rsa -C "注册邮箱"·
+如果没有密钥则不会有此文件夹，有则备份删除。
+查看是否已经有了ssh密钥：cd ~/.ssh （删除回车）
+此时，在C/User/Administrator/目录下会产生.ssh文件夹，使用记事本打开其中的id_rsa.pub文件，复制全部内容备用。
+3.在浏览器中打开github主页，按下图操作：点击头像-Settings-SSH and GPG keys-New SSH key
+其中title时随便填的，在key这一栏中把第二步复制的代码全部粘贴进来，点击Add SSHkey即可。
+
+测试通信
+ssh -T git@github.com 
+通信成功 本地和远程git打通
+接下来项目通信
+
+在本地建项目
+右键 gitbash  git init 初始化 
+在远程建立一个项目（图形界面工具） new
+（ssh 是本机和远程关联了 现在开始项目关联）
+复制远程项目的标识
+将本地项目和远程项目关联
+
+git remote  add origin 项目标识
+
+【解释】
+提交项目
+新建一个本地仓库（一般一个项目下一个仓库），在项目根目录下新建文件夹-test，然后进去该文件夹。鼠标右键，打开git -> Git Bash Here -> git init。执行命令后目录下创建一个.git文件夹（此文件夹为隐藏文件夹，需要设置windows显示隐藏文件）。
+添加需要上传到github的代码到本地仓库
+
+如何添加，首先将需要上传的代码复制粘贴到本地仓库——test文件夹。
+
+然后git status，这时候会发现多了一些东西，这些东西就是你刚刚复制进来的文件，显示为红色，就是待添加到本地仓库的意思，如下所示：其中text.txt即为待添加到本地仓库的文件。
+本地项目关联远程项目
+git remote add origin https://github.com/chenyingjun520/yqsl.git
+【/解释】
+
+第四部分 【项目通信】
+
+第一次发布项目(本地发送到远程)
+git add . (将本地项目发送到暂存区)
+
+git commit -m "注释内容"  将暂存区项目发布到本地仓库
+
+git push -u origin master 第一次提交项目
+ 
+第一次下载项目
+
+git clone https://github.com/chenyingjun520/yqsl.git
+
+长期维护
+
+更新项目 （远程到本地）
+
+
+第五部分 【开始开发】
+
+提交项目
+（在当前工作目录打开）
+git add 
+git commit -m "注释"
+git push  origin master 
+
+
+在Egit: 在eclipse中操作git
+目前的eclipse基本都支持git 如果不支持 则到 ecliplise marktoliace 搜 git 安装
+配置
+
+
+第六部分 【团队协作开发】
+git 团队协作开发
+
+在github中该项目右边点击setting
+然后第二个 collaborators（合作）
+增加合作者  github全名或者邮箱
+发送邀请链接
+合作伙伴打开链接，接受邀请，clone项目 修改 add commit push 就可以加入到团队合作中来了
+
+一个项目中只需要一个ssk就OK了 就表示这个项目的主人是谁，其他的合作者不需要再去加ssh key
+
+
+
+第六部分 【git加密上传文件】
+git加密上传文件 
+ 
+参考文件 https://www.jianshu.com/p/a40fc90df943
+常用的解决方法如下：
+
+1.明文上传到git，方便团队成员合作开发，共同维护配置文件。
+2.不传到git，本地保存，团队内成员需要使用配置文件再发给对方。
+那么今天将为大家介绍另一种解决方法：
+
+加密上传git
+一： 有何特性？
+1.加密后上传git，在git上保存的是二进制文件。
+2.分发密钥给可信开发人员，进行解密，维护配置文件。
+3.解密后为明文内容，如需上传，不用再进行加密，工具自动会生成最新的二进制文件后上传。
+
+
+
+
+
+ 
+
+
