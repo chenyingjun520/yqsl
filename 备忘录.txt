@@ -1,0 +1,89 @@
+此电脑如有任何问题请联系  17600733080 或邮箱 m17600733080@163.com
+
+12121
+电脑密码 yuanqizhiyao
+gitIP  192.168.3.31   
+git搭建需要修改的行  1993   2020
+C盘存在的项目：git上2亿个化合物   数据库管理系统  
+下载中心可找到最近的安装包 请勿删除
+
+更新化合物活性字段值
+UPDATE channel_list
+SET active = 
+(CASE WHEN standard_value <= 10000 THEN 1
+ELSE 0
+END);
+
+
+联合查询用到的字段
+1.建立三个表的视图
+2.检查查询  筛选无用的数据
+SELECT * FROM channel_assays_activities WHERE( standard_units = 'nM' AND standard_relation = '=' AND confidence_score >= '7');
+3.建立list表 
+复制一个没有active的表，然后倒入数据 最后加入active字段 然后运行下面sql语句，最后更新字段。
+
+UPDATE kinase_list
+SET active = 
+(CASE WHEN standard_value > 30 THEN 0
+ELSE 1
+END);
+
+('compound');
+
+
+容器IP：1121：9029
+
+$hxlx = $data['hxlx'];
+$score =$data['confidence_score']; 
+$list = $list=Db::table('target_dictionary')
+// ->field('target_dictionary.tid,target_dictionary.pref_name,target_dictionary.chembl_id,target_dictionary.target_type,target_dictionary.organism')
+->join('assays ON target_dictionary.tid = assays.tid')
+->join('activities ON activities.assays_id = assays.assays_id')
+->join('molecule_dictionary ON molecule_dictionary.molregno = activities.molregno')
+->join('compound_structures ON compound_structures.molregno = molecule_dictionary.molregno')
+// ->where('target_dictionary.pref_name|target_dictionary.chembl_id', 'like',$data['word'])
+->where('activities.standard_relation' , '=')
+->where('activities.standard_value' , '<=' ,10000)
+->where('activities.standard_units' , 'nm')
+->where('activities.standard_type' ,'IN',$hxlx)
+->where('assays.confidence_score' ,'>=',$score)
+// ->field('target_dictionary.tid, count(activities.record_id) as total')
+->order('target_dictionary.tid desc')
+->group('target_dictionary.tid')
+->select();
+var_dump($list);die;    
+
+array (size=13)
+  'word' => string 'Serine/threonine-protein kinase Aurora-A' (length=40)
+  'hxdw' => string 'nM' (length=2)
+  'hxlx' => 
+    array (size=2)
+      0 => string 'IC50' (length=4)
+      1 => string 'Ki' (length=2)
+  'Fruit' => string '' (length=0)
+  'confidence_score' => string '8' (length=1)
+  'kinase_list' => string '10' (length=2)
+  'gpcr_list' => string '10' (length=2)
+  'nuclear_list' => string '10' (length=2)
+  'channel_list' => string '10' (length=2)
+  'other_list' => string '10' (length=2)
+  'actives' => string '100' (length=3)
+  'inactives' => string '100' (length=3)
+  'sql' => string '' (length=0)
+
+target_dictionary
+target_components
+component_class
+protein_family_classification
+
+$list[$value] = $this->target_type_list($hxlx,$confidence_score,$hxbd,$target_type);
+
+
+
+$target_list = Db::table($target_type)
+->where('standard_type' ,'IN',$hxlx)
+->where('confidence_score' , $confidence_score)
+->where('standard_value' , '<=' ,$hxbd*1000)
+->order('tid desc')
+->group('tid')
+->select();

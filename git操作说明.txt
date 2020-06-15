@@ -1,0 +1,118 @@
+【Git规范化工作流程】 
+
+
+【git 初始化 克隆远程版本】
+git init 
+#如果是第一次提交需如下操作 (以张三为例)
+git config --global user.name "zhangsan"
+git config --global user.email "zhangsan@163.com"
+
+git clone <url>
+
+【本地修改文件并提交到远程仓库】
+
+注意：每次提交代码之前都要先执行如下代码
+git pull .
+合并后再提交自己的文件
+
+
+git add .#如果是提交一个文件 后面跟具体的文件名
+git commit -m "注释"
+git remote add origin <url> #提交到哪一个版本库
+git push -u origin master #第一次提交 到master分支上 如果不是第一次提交去掉-u 即：git push origin master
+
+【查看提交信息】
+git status
+
+工作过程中遇到以下问题可以参考如下的方法解决：
+
+【案例一】
+当提交代码时忘记pull想回归到制定版本号,执行如下操作
+
+思路：当出现上面情况时，有两种方式可以解决：一，使用命令回滚到指定版本，保存为文件a，然后拉取线上最新的版本保存为文件b，本地合成a和b，然后重新提交。二是在本地新建分支如取名dev，切换到dev，然后拉取代码指定版本文件到dev，讲本地dev推送到远程dev,合并dev到master（这个顺序一定不能乱），合并完后别忘记pull到本地然后在修改提交。
+
+总之一个原则：提交后本地的文件和远程分支文件是一样的就OK。
+
+下面先以第一种思路来解决：
+创建文件夹A
+git init 
+git reset --hard  5c6de4a25bf606f484483e9fc9044ebd25a6e03f
+创建文件夹B
+git init
+git pull 
+讲A和B合并为一个文件夹（比如将B文件复制到A中） 
+切换到A
+git add 
+git commit -m "注释"
+git push origin master
+
+
+第二种思路解决方案：
+git branch dev 
+git checkout -b dev origin/dev #切换到dev
+git reset --hard  5c6de4a  #回滚到指定5c6de4a版本
+git checkout master #切换到master
+git merge dev #将Dev分支合并到master（遇到冲突解决冲突）
+git push origin master #从master分支提交到远程master分支
+git pull 同步到本地
+
+
+如果不切换分支也可以使用下面命令提交：
+git push origin dev:master
+
+【案例二】
+放弃本地修改，使用服务器代码强制覆盖本地代码，操作如下
+
+$ git fetch --all
+$ git reset --hard origin/master 
+$ git pull
+
+
+备注： git pull 以及 git pull . 的区别
+
+git pull . 一般用在第一次拉取线上的代码时使用，有强制覆盖的意思 功能类似于git clone
+git pull  一般用于在提交代码之前进行的操作，如果本地有文件与远程冲突，则会提示。
+ 
+
+如遇到其他问题欢迎在git上提交工单或在飞秋上一起探讨。
+参考资料：https://www.cnblogs.com/ydxblog/p/7988317.html
+
+
+
+
+
+
+
+附录：
+
+Git所有操作命令
+git branch 查看本地所有分支
+git status 查看当前状态
+git commit 提交
+git branch -a 查看所有的分支
+git branch -r 查看远程所有分支
+git commit -am "init" 提交并且加注释
+git remote add origin git@192.168.1.119:ndshowgit push origin master 将文件给推到服务器上
+git remote show origin 显示远程库origin里的资源
+git push origin master:developgit push origin master:hb-dev 将本地库与服务器上的库进行关联
+git checkout --track origin/dev 切换到远程dev分支
+git branch -D master develop 删除本地库
+developgit checkout -b dev 建立一个新的本地分支
+devgit merge origin/dev 将分支dev与当前分支进行合并
+git checkout dev 切换到本地dev分支
+git remote show 查看远程库
+git add .git rm 文件名(包括路径) 从git中删除指定文件
+git clone git://github.com/schacon/grit.git 从服务器上将代码给拉下来
+git config --list 看所有用户git ls-files 看已经被提交的
+git rm [file name] 删除一个文件
+git commit -a 提交当前repos的所有的改变
+git add [file name] 添加一个文件到
+git indexgit commit -v 当你用－v参数的时候可以看commit的差异
+git commit -m "This is the message describing the commit" 添加commit信息
+git commit -a -a是代表add，把所有的change加到git index里然后再commitgit commit -a -v 一般提交命令
+git log 看你commit的日志git diff 查看尚未暂存的更新git rm a.a 移除文件(从暂存区和工作区中删除)
+git rm --cached a.a 移除文件(只从暂存区中删除)
+git commit -m "remove" 移除文件(从Git中删除)
+git rm -f a.a 强行移除修改后文件(从暂存区和工作区中删除)
+git diff --cached 或 $ git diff --staged 查看尚未提交的更新
+git stash push 将文件给push到一个临时空间中git stash pop 将文件从临时空间pop下来 

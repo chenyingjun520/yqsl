@@ -1,0 +1,34 @@
+
+【gitlab说明文档】
+
+git服务器地址  http://192.168.3.10/
+用户名：姓名小写全拼
+密码：12345678
+
+第一：修改密码
+第二：配置客户端秘钥
+第三：拉取代码
+
+下面以我的账号为例 示范如下
+git init
+git config --global user.name "chenyingjun"
+git config --global user.email "chenyingjun@163.com"
+ssh-keygen -t rsa -C "chenyingjun@163.com"
+
+这一步中生成了一个.ssh的文件夹，里面有两个文件 将，名为id_rsa的文件使用文档编辑器打开，复制后贴在git相应的位置，然后保存后就可以使用下面的命令拉去代码
+
+
+
+
+git add .
+git commit -m "第一次测试提交"
+$ git remote add origin ssh://admin@192.168.3.10/demo.git
+$ git push -u  origin master
+
+如果到最后一步出现报错的时候 参考资料
+https://jingyan.baidu.com/article/36d6ed1fb320531bcf4883e6.html
+git pull --rebase origin master 
+git push -u origin master
+到这一步齐活
+
+
